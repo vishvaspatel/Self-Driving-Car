@@ -102,23 +102,36 @@ Based on Microsoft AirSim, this simulator offers a more photorealistic and compl
 
 **Table: Detailed SteeringCNN Architecture**
 
-| Layer (Type)         | Output Shape     | Parameters |
-|----------------------|------------------|------------|
-| Conv2d               | [-1, 32, 64, 64]  | 2,432      |
-| BatchNorm2d          | [-1, 32, 64, 64]  | 64         |
-| Conv2d               | [-1, 64, 32, 32]  | 18,496     |
-| BatchNorm2d          | [-1, 64, 32, 32]  | 128        |
-| Conv2d               | [-1, 128, 16, 16] | 73,856     |
-| BatchNorm2d          | [-1, 128, 16, 16] | 256        |
-| Conv2d               | [-1, 256, 8, 8]   | 295,168    |
-| BatchNorm2d          | [-1, 256, 8, 8]   | 512        |
-| Linear               | [-1, 512]         | 2,097,664  |
-| BatchNorm1d          | [-1, 512]         | 1,024      |
-| Linear               | [-1, 256]         | 131,328    |
-| Linear               | [-1, 1]           | 257        |
-| **Total**            |                  | **2,621,697** |
-
----
+| Layer (Type)          | Output Shape       | Parameters |
+|-----------------------|--------------------|------------|
+| Conv2d-1              | [-1, 32, 64, 64]    | 2,432      |
+| BatchNorm2d-2         | [-1, 32, 64, 64]    | 64         |
+| ReLU-3                | [-1, 32, 64, 64]    | 0          |
+| MaxPool2d-4           | [-1, 32, 32, 32]    | 0          |
+| Conv2d-5              | [-1, 64, 32, 32]    | 18,496     |
+| BatchNorm2d-6         | [-1, 64, 32, 32]    | 128        |
+| ReLU-7                | [-1, 64, 32, 32]    | 0          |
+| MaxPool2d-8           | [-1, 64, 16, 16]    | 0          |
+| Conv2d-9              | [-1, 128, 16, 16]   | 73,856     |
+| BatchNorm2d-10        | [-1, 128, 16, 16]   | 256        |
+| ReLU-11               | [-1, 128, 16, 16]   | 0          |
+| MaxPool2d-12          | [-1, 128, 8, 8]     | 0          |
+| Conv2d-13             | [-1, 256, 8, 8]     | 295,168    |
+| BatchNorm2d-14        | [-1, 256, 8, 8]     | 512        |
+| ReLU-15               | [-1, 256, 8, 8]     | 0          |
+| MaxPool2d-16          | [-1, 256, 4, 4]     | 0          |
+| AdaptiveAvgPool2d-17  | [-1, 256, 4, 4]     | 0          |
+| Linear-18             | [-1, 512]           | 2,097,664  |
+| BatchNorm1d-19        | [-1, 512]           | 1,024      |
+| ReLU-20               | [-1, 512]           | 0          |
+| Dropout-21            | [-1, 512]           | 0          |
+| Linear-22             | [-1, 256]           | 131,328    |
+| BatchNorm1d-23        | [-1, 256]           | 512        |
+| ReLU-24               | [-1, 256]           | 0          |
+| Dropout-25            | [-1, 256]           | 0          |
+| Linear-26             | [-1, 1]             | 257        |
+| **Total Parameters**  |                    | **2,621,697** |
+| **Trainable Params**  |                    | **2,621,697** |
 
 ### 🔹 Approach 4: CNN on AirSimNH (Steering + Throttle)
 
