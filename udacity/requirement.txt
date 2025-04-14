@@ -1,0 +1,10 @@
+opencv-contrib-python
+numpy==1.26.4
+matplotlib==3.8.0
+tensorflow==2.17.0
+keras==3.4.1
+python-socketio
+Flask
+eventlet
+python-engineio==3.13.2
+python-socketio==4.6.1
