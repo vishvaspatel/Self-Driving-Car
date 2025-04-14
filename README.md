@@ -215,7 +215,7 @@ Based on Microsoft AirSim, this simulator offers a more photorealistic and compl
 ## 🌐 Deployment
 
 Try our web demo:  
-👉 **[Streamlit App](https://requirementstxt-vhoxy8j2hvuzsqcfbesfxj.streamlit.app/)**
+👉 **[Streamlit App](https://autonomouscarapp-app-iur6pfwku8u5pjovsjmcab.streamlit.app/)**
 
 ---
 
