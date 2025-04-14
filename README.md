@@ -14,13 +14,20 @@ This project focuses on enhancing the lateral control of autonomous vehicles usi
 - Deploy the trained model on a web application.
 
 ---
+## 1. Overview of Simulators
 
-## 🧪 Simulators Used
+### 1.1 Udacity Simulator
 
-| Simulator       | Description |
-|-----------------|-------------|
-| **Udacity**     | Simple simulator for educational use with basic physics and 3-camera setup. |
-| **AirSimNH**    | Advanced, photorealistic simulator from Microsoft with support for complex physics and sensors. |
+This simulator, often integrated with Udacity’s online courses, provides focused environments and scenarios designed for learning specific self-driving concepts and algorithms. It typically features simplified physics and sensor models, prioritizing pedagogical clarity and ease of use for educational purposes. The simulator often utilizes Python and libraries specific to the Udacity curriculum.
+
+![udacity](https://github.com/user-attachments/assets/2f667bac-b5b2-412e-bb08-05def1ef8a20)
+
+
+### 1.2 AirSimNH Simulator
+
+Based on Microsoft AirSim, this simulator offers a more photorealistic and complex environment with detailed physics and support for a wider range of realistic sensors like LiDAR and radar. It allows for greater flexibility in creating custom scenarios and integrates well with industry-standard tools and frameworks such as ROS and Unreal Engine, making it suitable for more advanced research and development. AirSimNH enables the simulation of diverse and challenging real-world conditions.
+
+![airsimnh](https://github.com/user-attachments/assets/034b02fb-d1ea-410a-9f60-146f7a2259cc)
 
 ---
 
