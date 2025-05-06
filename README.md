@@ -1,4 +1,4 @@
-# Lateral Control for Autonomous Vehicles: Project Report
+# Lateral Control for Autonomous Vehicles: Self Driving Car
 
 **Date:** May 2025
 **Institution:** Indian Institute of Technology Jodhpur
@@ -9,8 +9,6 @@
 
 This project presents a deep-learning–based pipeline for robust lateral control of autonomous vehicles. We compare Convolutional Neural Networks (CNNs) and Vision Transformers (ViTs) for end-to-end steering and throttle prediction, integrating object and lane detection modules for enhanced safety. Synthetic datasets are generated in Udacity and AirSimNH simulators, balanced and augmented to train multi-task models. A web-based Streamlit app demonstrates real-time inference.
 
-**Keywords:** lateral control, CNN, Vision Transformer, YOLOv5, simulator, multi-task learning
-
 ---
 
 ## 1. Experimental Setup
@@ -19,6 +17,11 @@ This project presents a deep-learning–based pipeline for robust lateral contro
 
 * **Udacity Simulator:** Simplified physics, designed for educational experiments with center/left/right camera streams.
 * **AirSimNH Simulator:** Photorealistic environment with detailed sensor models (LiDAR, radar) and ROS/Unreal Engine integration.
+
+| ![udacity](https://github.com/user-attachments/assets/448b8ad1-8236-4e07-a675-ff7af0bae2c8) | ![airsimnh](https://github.com/user-attachments/assets/f9b33ab8-7b2e-4393-b4d2-7f3e5f40f14e) |
+|:------------------------------------------:|:-------------------------------------------:|
+
+
 
 ### 1.2 Dataset Details
 
