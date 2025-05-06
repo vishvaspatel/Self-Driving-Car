@@ -92,13 +92,11 @@ This project presents a deep-learning–based pipeline for robust lateral contro
 
 * **Triggering Logic:** If YOLOv5 detects any object whose bounding box enters the predefined collision zone (distance < 5 m, central field of view), issue an immediate brake command.
 * **Brake Command:** Throttle set to zero; optional handbrake flag in simulator APIs to simulate full stop.
-* **Response Time:** System operates at 10 Hz, ensuring detection-to-brake latency <100 ms.
 
 ### 2.3 Emergency Brake + Steering Adjustment
 
 * **Combined Strategy:** Upon obstacle detection in lateral proximity (<2 m from vehicle centerline), throttle is reduced by 50% and steering angle is adjusted away from obstacle.
 * **Steering Adjustment:** Compute obstacle centroid in image frame, map to steering offset via linear mapping: Δθ = k·(x\_img−x\_center), with k calibrated from simulator.
-* **Fail-Safe:** If steering offset exceeds safe limit (±0.3 rad), prioritize braking over steering to avoid overcorrection.
 
 ### 2.4 Model Architectures
 
@@ -115,7 +113,7 @@ Refer to Section 3 for detailed performance results.
 
 ### 2.5 Multi-Task Learning
 
-* **Loss Function:** L = α·MAE\_steer + (1−α)·MAE\_throttle, with α=0.6 determined via grid search.
+* **Loss Function:** L = α·MAE\_steer + (1−α)·MAE\_throttle
 * **Training:** Joint backpropagation optimizes shared backbone and distinct heads, using AdamW optimizer and learning rates tuned per model.
 
 ### 2.6 Safety and Smoothing
