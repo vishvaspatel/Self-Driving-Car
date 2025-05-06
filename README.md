@@ -39,16 +39,19 @@ This project presents a deep-learning–based pipeline for robust lateral contro
 | Augmented training samples   | 3,511         |
 | Augmented validation samples | 878           |
 
-<table>
-  <tr>
-    <td style="background-color: white; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/7d6528cf-960a-4a18-abe7-4c61d68d8860" alt="udacity" width="200" />
-    </td>
-    <td style="background-color: white; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/d7c8e565-9d43-40d4-8995-ff3fdd10bf04" alt="airsimnh" width="200" />
-    </td>
-  </tr>
-</table>
+<div style="background-color: black; padding: 20px; display: inline-block;">
+  <table cellspacing="0" cellpadding="0">
+    <tr>
+      <td style="background-color: white; padding: 10px;">
+        <img src="https://github.com/user-attachments/assets/7d6528cf-960a-4a18-abe7-4c61d68d8860" alt="udacity" width="200" />
+      </td>
+      <td style="background-color: white; padding: 10px;">
+        <img src="https://github.com/user-attachments/assets/d7c8e565-9d43-40d4-8995-ff3fdd10bf04" alt="airsimnh" width="200" />
+      </td>
+    </tr>
+  </table>
+</div>
+
 
 
 * **AirSimNH Dataset:** Over 40,000 raw frames captured at 5 Hz across urban and highway scenarios.
