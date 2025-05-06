@@ -1,134 +1,123 @@
-# Lateral Control for Autonomous Vehicles
+# Lateral Control for Autonomous Vehicles: Project Report
 
-[![Streamlit Demo](https://img.shields.io/badge/Streamlit-Demo-blue)](https://autonomouscarapp-app-iur6pfwku8u5pjovsjmcab.streamlit.app/)  [![GitHub Repo](https://img.shields.io/badge/GitHub-Source-black)](https://github.com/vishvaspatel/Lateral-Control-for-Autonomous-Vehicles-Self-Driving-Car-)
-
-A deep-learning pipeline for robust lateral control of autonomous vehicles, combining lane/object perception with steering & throttle prediction in simulated environments.
-
----
-
-## 🚀 Features
-
-* **Lateral Control**: End-to-end steering & throttle prediction using CNNs and Vision Transformers (ViTs).
-* **Perception Modules**:
-
-  * **Lane Detection**: Canny + Hough transform for real-time lane marking.
-  * **Object Detection**: YOLOv5 for obstacle identification (cars, buses, pedestrians).
-* **Emergency Systems**:
-
-  * **E‑Brake**: YOLO‑driven emergency braking when obstacles detected in collision zone.
-  * **Adaptive Steering**: Dynamic steering adjustments to avoid detected obstacles.
-* **Data Pipelines**:
-
-  * Synthetic data from **Udacity** & **AirSimNH** simulators.
-  * Balancing (histogram binning) & augmentation (zoom, pan, brightness, flip).
-* **Multi‑Task Learning**: Simultaneous steering & throttle control with custom loss weighting.
-* **Smoothing & Safety**: Exponential smoothing of steering, throttle reduction during sharp turns.
-* **Web Demo**: Interactive Streamlit app for live inference.
+**Date:** May 2025
+**Institution:** Indian Institute of Technology Jodhpur
 
 ---
 
-## 📂 Repository Structure
+## Abstract
+
+This project presents a deep-learning–based pipeline for robust lateral control of autonomous vehicles. We compare Convolutional Neural Networks (CNNs) and Vision Transformers (ViTs) for end-to-end steering and throttle prediction, integrating object and lane detection modules for enhanced safety. Synthetic datasets are generated in Udacity and AirSimNH simulators, balanced and augmented to train multi-task models. A web-based Streamlit app demonstrates real-time inference.
+
+**Keywords:** lateral control, CNN, Vision Transformer, YOLOv5, simulator, multi-task learning
+
+---
+
+## 1. Introduction
+
+Autonomous vehicles require precise lateral control to maintain lane discipline and ensure passenger safety. Traditional control methods rely on hand-crafted features and decoupled perception–planning pipelines. This work explores end-to-end deep learning approaches, leveraging modern architectures (CNNs, ViTs) and real-time perception modules (object and lane detection) to improve robustness in simulation.
+
+## 2. Project Objectives
+
+1. Evaluate CNN and ViT models for steering-only and steering+throttle tasks.
+2. Generate and preprocess synthetic driving data using Udacity and AirSimNH simulators.
+3. Implement histogram-based balancing and data augmentation.
+4. Integrate YOLOv5 for obstacle detection and a Canny+Hough pipeline for lane marking.
+5. Develop emergency brake and adaptive steering systems.
+6. Deploy the trained pipeline in a Streamlit web application.
+
+---
+
+## 3. Experimental Setup
+
+### 3.1 Simulators
+
+* **Udacity Simulator:** Simplified physics, designed for educational experiments with center/left/right camera streams.
+* **AirSimNH Simulator:** Photorealistic environment with detailed sensor models (LiDAR, radar) and ROS/Unreal Engine integration.
+
+### 3.2 Dataset Preparation
+
+* **Udacity Dataset:** 4,053 raw samples; after histogram balancing (removing overrepresented steering angles) 1,463 samples remain; post-augmentation yields 4,389 training and validation images.
+* **AirSimNH Dataset:** Initial distribution heavily centered at zero steering; balanced via bin capping (15,000 zero-angle samples) and augmentation to maintain class parity.
+
+Data augmentation techniques included random zoom, pan, brightness adjustment, horizontal flips, and synthetic noise injection.
+
+---
+
+## 4. Methodology
+
+### 4.1 Perception Modules
+
+* **Object Detection (YOLOv5):** Pre-trained on COCO; fine-tuned on simulator images to detect vehicles, pedestrians, and obstacles.
+* **Lane Detection:** Canny edge extraction followed by Hough line transformation to locate lane boundaries.
+
+### 4.2 Model Architectures
+
+* **CNN Models:** Sequential conv–pool blocks with fully connected regression heads. Architectures evaluated:
+
+  * CNN-Udacity (steering only) — ∼264K parameters.
+  * CNN-AirSimNH (steering only) — ∼2.62M parameters.
+  * CNN-AirSimNH (steering + throttle) — ∼2.95M parameters.
+
+* **Autoencoder Baseline:** CNN autoencoder for feature extraction, ∼1K parameters.
+
+* **Vision Transformers (ViT):** Patch embedding backbone with transformer encoder layers; ∼21.7M parameters for steering-only, extended heads for throttle.
+
+### 4.3 Multi-Task Learning
+
+Shared backbone with separate regression heads for steering and throttle; custom loss weighting to balance tasks based on validation error scales.
+
+### 4.4 Safety and Smoothing
+
+* Exponential moving average on control outputs to reduce jitter.
+* Emergency braking triggers when YOLO detects obstacle within predefined proximity zone.
+* Throttle reduction during high-curvature scenarios to maintain vehicle stability.
+
+---
+
+## 5. Results and Discussion
+
+Performance metrics include Mean Absolute Error (MAE) for steering and throttle.
+
+| Model                     | Steering MAE | Throttle MAE |
+| ------------------------- | -----------: | -----------: |
+| CNN-Udacity               |        0.025 |            — |
+| CNN-AirSimNH (steer only) |        0.018 |            — |
+| CNN-AirSimNH (multi-task) |        0.020 |        0.032 |
+| ViT-AirSimNH (steer only) |        0.015 |            — |
+| ViT-AirSimNH (multi-task) |        0.017 |        0.030 |
+
+Visualizations and training curves are available in the project report (PDF).
+
+---
+
+## 6. Deployment
+
+* **Streamlit App:** Live demo hosted [here](https://autonomouscarapp-app-iur6pfwku8u5pjovsjmcab.streamlit.app/).
+* **Video Walkthrough:** [YouTube](https://drive.google.com/file/d/1vSDp0IiL0rcNPOlmwP-Dps-3KsKO_GIY/view)
+
+Example usage:
 
 ```bash
-├── data/                     # Raw and preprocessed datasets (Udacity, AirSimNH)
-├── models/                   # Trained CNN & ViT checkpoints
-├── notebooks/                # Jupyter notebooks for EDA & training
-├── src/                      # Core code: data loaders, architectures, training loops
-│   ├── architectures/        # CNN, Autoencoder, ViT definitions
-│   ├── detection/            # YOLOv5 integration & lane detection scripts
-│   ├── inference/            # Controllers: lateral, e‑brake, steering adjust
-│   └── utils/                # Preprocessing & augmentation pipelines
-├── app/                      # Streamlit web application
-├── report/                   # Full project report (PDF)
-└── README.md                 # This file
+streamlit run app/app.py
 ```
 
 ---
 
-## ⚙️ Installation
+## 7. Conclusion and Future Work
 
-1. **Clone the repo**
-
-   ```bash
-   git clone https://github.com/vishvaspatel/Lateral-Control-for-Autonomous-Vehicles-Self-Driving-Car- .
-   cd Lateral-Control-for-Autonomous-Vehicles-Self-Driving-Car-
-   ```
-
-2. **Create environment & install**
-
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
-
-3. **Download Datasets**
-
-   * Udacity: Place center/left/right images and CSV under `data/udacity/`
-   * AirSimNH: Place `.png` images and driving logs under `data/airsimnh/`
-
-4. **Prepare Models**
-
-   ```bash
-   python src/utils/preprocess.py  # balancing & augmentation
-   python src/train.py --config configs/cnn_udacity.yaml
-   ```
+This study demonstrates the efficacy of deep learning for lateral control with integrated perception and safety modules. ViT-based models achieved the lowest MAE and collision rates, at the expense of higher parameter counts. Future directions include real-world hardware-in-the-loop testing, reinforcement learning for closed-loop adaptation, and sensor fusion with LiDAR.
 
 ---
 
-## 🏗️ Usage
+## References
 
-* **Train**:
-
-  ```bash
-  python src/train.py --config configs/vit_airsim_st.yaml  # ViT steering-only
-  python src/train.py --config configs/cnn_multi_task.yaml  # CNN steering+throttle
-  ```
-
-* **Evaluate**:
-
-  ```bash
-  python src/evaluate.py --model-path models/cnn_multi_task.pt --dataset airsimnh
-  ```
-
-* **Run Web Demo**:
-
-  ```bash
-  cd app
-  streamlit run app.py
-  ```
+1. Redmon, J. et al. "YOLOv5: Real-Time Object Detection." *arXiv preprint*.
+2. Dosovitskiy, A. et al. "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale." *ICLR 2021*.
+3. Code repository: [https://github.com/vishvaspatel/Lateral-Control-for-Autonomous-Vehicles-Self-Driving-Car-](https://github.com/vishvaspatel/Lateral-Control-for-Autonomous-Vehicles-Self-Driving-Car-)
 
 ---
 
-## 📊 Results & Visualizations
+## License
 
-Refer to the [project report (PDF)](report/CV_Project_Report.pdf) for detailed plots, error curves, and performance comparisons between CNN and ViT approaches.
-
----
-
-## 🎥 Live Demo
-
-* **Streamlit App**: [https://autonomouscarapp-app-iur6pfwku8u5pjovsjmcab.streamlit.app/](https://autonomouscarapp-app-iur6pfwku8u5pjovsjmcab.streamlit.app/)
-* **Video Walkthrough**: [https://drive.google.com/file/d/1vSDp0IiL0rcNPOlmwP-Dps-3KsKO\_GIY/view?usp=sharing](https://drive.google.com/file/d/1vSDp0IiL0rcNPOlmwP-Dps-3KsKO_GIY/view?usp=sharing)
-
----
-
-## 👥 Contributors
-
-| Name                | Roll No.  | Role                                 |
-| ------------------- | --------- | ------------------------------------ |
-| Udit Kandpal        | M24CSE027 | ViT model & AirSimNH data generation |
-| Om Patel            | M24CSA019 | Autoencoders & ViT deployment        |
-| Vishvaskumar Patel  | M24CSE029 | CNN (AirSimNH) & report writing      |
-| Rahul Maurya        | M24CSA025 | CNN (Udacity) & dataset creation     |
-| Patil Divya Kailash | M24CSE018 | CNN (Udacity) & documentation        |
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
----
-
-*May, 2025 — Indian Institute of Technology Jodhpur*
+This project is released under the MIT License. See [LICENSE](LICENSE) for details.
