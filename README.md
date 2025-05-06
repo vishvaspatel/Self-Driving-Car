@@ -39,6 +39,14 @@ This project presents a deep-learning–based pipeline for robust lateral contro
 | Augmented training samples   | 3,511         |
 | Augmented validation samples | 878           |
 
+
+| ![udacity_data_before_balancing](https://github.com/user-attachments/assets/1e68375e-7d80-4232-a843-65c52c8e28cb) | ![udacity_data_after_balancing](https://github.com/user-attachments/assets/52e0e9f1-5c57-4af4-a511-3750d48ae4c8) |
+|:------------------------------------------:|:-------------------------------------------:|
+
+
+
+
+
 * **AirSimNH Dataset:** Over 40,000 raw frames captured at 5 Hz across urban and highway scenarios.
 
   * **Initial Steering Distribution:** heavily skewed to zero (26,012 samples).
