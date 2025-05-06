@@ -39,12 +39,16 @@ This project presents a deep-learning–based pipeline for robust lateral contro
 | Augmented training samples   | 3,511         |
 | Augmented validation samples | 878           |
 
-
-| ![udacity_data_before_balancing](https://github.com/user-attachments/assets/1e68375e-7d80-4232-a843-65c52c8e28cb) | ![udacity_data_after_balancing](https://github.com/user-attachments/assets/52e0e9f1-5c57-4af4-a511-3750d48ae4c8) |
-|:------------------------------------------:|:-------------------------------------------:|
-
-
-
+<table>
+  <tr>
+    <td style="background-color: white; padding: 10px;">
+      <img src="https://github.com/user-attachments/assets/448b8ad1-8236-4e07-a675-ff7af0bae2c8" alt="udacity" width="200" />
+    </td>
+    <td style="background-color: white; padding: 10px;">
+      <img src="https://github.com/user-attachments/assets/f9b33ab8-7b2e-4393-b4d2-7f3e5f40f14e" alt="airsimnh" width="200" />
+    </td>
+  </tr>
+</table>
 
 
 * **AirSimNH Dataset:** Over 40,000 raw frames captured at 5 Hz across urban and highway scenarios.
@@ -58,6 +62,13 @@ This project presents a deep-learning–based pipeline for robust lateral contro
 | -0.5           | 1,124         | 1,124         |
 | 0.0            | 26,012        | 15,000        |
 | 0.5            | 7,571         | 7,571         |
+
+| ![airsim_dataset_before_balancing](https://github.com/user-attachments/assets/3d20b05e-4c3f-4f5e-b12d-65d6040271ba) | ![airsim_dataset_after_balancing](https://github.com/user-attachments/assets/5ca0e717-c404-4cde-b7a0-3e15380a25b1) |
+|:------------------------------------------:|:-------------------------------------------:|
+
+
+
+
 
 ### 1.3 Preprocessing Steps
 
