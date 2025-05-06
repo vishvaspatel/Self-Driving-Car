@@ -42,10 +42,10 @@ This project presents a deep-learning–based pipeline for robust lateral contro
 <table>
   <tr>
     <td style="background-color: white; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/448b8ad1-8236-4e07-a675-ff7af0bae2c8" alt="udacity" width="200" />
+      <img src="https://github.com/user-attachments/assets/7d6528cf-960a-4a18-abe7-4c61d68d8860" alt="udacity" width="200" />
     </td>
     <td style="background-color: white; padding: 10px;">
-      <img src="https://github.com/user-attachments/assets/f9b33ab8-7b2e-4393-b4d2-7f3e5f40f14e" alt="airsimnh" width="200" />
+      <img src="https://github.com/user-attachments/assets/d7c8e565-9d43-40d4-8995-ff3fdd10bf04" alt="airsimnh" width="200" />
     </td>
   </tr>
 </table>
