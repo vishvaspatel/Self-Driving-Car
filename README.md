@@ -140,7 +140,7 @@ Visualizations and training curves are available in the project report (PDF).
 ## 4. Deployment
 
 * **Streamlit App:** Live demo hosted [here](https://autonomouscarapp-app-iur6pfwku8u5pjovsjmcab.streamlit.app/).
-* **Video Walkthrough:** [YouTube](https://drive.google.com/file/d/1vSDp0IiL0rcNPOlmwP-Dps-3KsKO_GIY/view)
+* **Video Walkthrough:** [Video](https://drive.google.com/file/d/1vSDp0IiL0rcNPOlmwP-Dps-3KsKO_GIY/view)
 
 Example usage:
 
