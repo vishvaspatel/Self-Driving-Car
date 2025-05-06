@@ -1,11 +1,7 @@
-# Lateral Control for Autonomous Vehicles: Self Driving Car
+# Lateral Control for Autonomous Vehicles: Project Report
 
 **Date:** May 2025
 **Institution:** Indian Institute of Technology Jodhpur
-![airsimnh](https://github.com/user-attachments/assets/78a0ef64-e284-4ff2-9f61-ee31ca161197)
-![udacity](https://github.com/user-attachments/assets/b5bd59e1-3af6-41b1-91f5-8ebbda16adcb)
-
-
 
 ---
 
@@ -17,69 +13,103 @@ This project presents a deep-learning–based pipeline for robust lateral contro
 
 ---
 
-## 1. Introduction
+## 1. Experimental Setup
 
-Autonomous vehicles require precise lateral control to maintain lane discipline and ensure passenger safety. Traditional control methods rely on hand-crafted features and decoupled perception–planning pipelines. This work explores end-to-end deep learning approaches, leveraging modern architectures (CNNs, ViTs) and real-time perception modules (object and lane detection) to improve robustness in simulation.
-
-## 2. Project Objectives
-
-1. Evaluate CNN and ViT models for steering-only and steering+throttle tasks.
-2. Generate and preprocess synthetic driving data using Udacity and AirSimNH simulators.
-3. Implement histogram-based balancing and data augmentation.
-4. Integrate YOLOv5 for obstacle detection and a Canny+Hough pipeline for lane marking.
-5. Develop emergency brake and adaptive steering systems.
-6. Deploy the trained pipeline in a Streamlit web application.
-
----
-
-## 3. Experimental Setup
-
-### 3.1 Simulators
+### 1.1 Simulators
 
 * **Udacity Simulator:** Simplified physics, designed for educational experiments with center/left/right camera streams.
 * **AirSimNH Simulator:** Photorealistic environment with detailed sensor models (LiDAR, radar) and ROS/Unreal Engine integration.
 
-### 3.2 Dataset Preparation
+### 1.2 Dataset Details
 
-* **Udacity Dataset:** 4,053 raw samples; after histogram balancing (removing overrepresented steering angles) 1,463 samples remain; post-augmentation yields 4,389 training and validation images.
-* **AirSimNH Dataset:** Initial distribution heavily centered at zero steering; balanced via bin capping (15,000 zero-angle samples) and augmentation to maintain class parity.
+* **Udacity Dataset:** 4,053 raw image samples (center camera), recorded at 10 Hz over varying tracks and lighting conditions.
 
-Data augmentation techniques included random zoom, pan, brightness adjustment, horizontal flips, and synthetic noise injection.
+  * **Steering Angle Distribution (raw):** heavily concentrated around zero steering.
+  * **Balanced Samples:** Removed 2,590 samples from the \[-0.1, 0.1] steering bin to mitigate bias, resulting in 1,463 samples.
+  * **Post-Augmentation:** Applied geometric and photometric transforms to expand to 3,511 training and 878 validation images.
+
+| Transformation Step          | Samples Count |
+| ---------------------------- | ------------- |
+| Total raw samples            | 4,053         |
+| Removed for balancing        | 2,590         |
+| Remaining after balancing    | 1,463         |
+| Augmented training samples   | 3,511         |
+| Augmented validation samples | 878           |
+
+* **AirSimNH Dataset:** Over 40,000 raw frames captured at 5 Hz across urban and highway scenarios.
+
+  * **Initial Steering Distribution:** heavily skewed to zero (26,012 samples).
+  * **Balanced via Bin Capping:** Limited zero-angle bin to 15,000 samples, retaining all other bins.
+  * **Final Dataset:** \~36,695 frames before augmentation.
+
+| Steering Angle | Initial Count | After Capping |
+| -------------- | ------------- | ------------- |
+| -0.5           | 1,124         | 1,124         |
+| 0.0            | 26,012        | 15,000        |
+| 0.5            | 7,571         | 7,571         |
+
+### 1.3 Preprocessing Steps
+
+1. **Frame Extraction:** Loaded raw PNG/JPG images, resized to 100×320 resolution.
+2. **Image Cropping:** Removed top 50 pixels (sky and vehicle hood) to focus on roadway.
+3. **Color Space Conversion:** Converted RGB to YUV for improved lighting invariance.
+4. **Normalization:** Scaled pixel values to \[0, 1] and standardized per-channel mean and std.
+5. **Histogram Equalization:** Applied CLAHE on Y channel to enhance contrast.
+6. **Steering Binning:** Discretized continuous steering angles into 15 uniform bins for balancing.
+7. **Data Augmentation:** In training pipeline:
+
+   * Random zoom (0.8–1.2×)
+   * Random horizontal shift (±50 px) and vertical shift (±10 px)
+   * Brightness adjustment (±20%)
+   * Gaussian noise injection (σ=0.01)
+   * Random horizontal flips (steering angle negated)
+8. **Dataset Splitting:** 80/20 train/validation split, stratified by steering bins to preserve distribution.
 
 ---
 
-## 4. Methodology
+## 2. Methodology
 
-### 4.1 Perception Modules
+### 2.1 Detection Modules
 
-* **Object Detection (YOLOv5):** Pre-trained on COCO; fine-tuned on simulator images to detect vehicles, pedestrians, and obstacles.
-* **Lane Detection:** Canny edge extraction followed by Hough line transformation to locate lane boundaries.
+* **Object Detection (YOLOv5):** A YOLOv5 model pretrained on COCO and fine-tuned on simulator data to detect vehicles, pedestrians, and static obstacles. Detections include bounding box coordinates and confidence scores.
+* **Lane Detection:** Canny edge detection on grayscale images followed by Hough line transform to extract lane boundary segments; post-processing merges colinear lines and fits lane polynomials.
 
-### 4.2 Model Architectures
+### 2.2 Emergency Braking System
 
-* **CNN Models:** Sequential conv–pool blocks with fully connected regression heads. Architectures evaluated:
+* **Triggering Logic:** If YOLOv5 detects any object whose bounding box enters the predefined collision zone (distance < 5 m, central field of view), issue an immediate brake command.
+* **Brake Command:** Throttle set to zero; optional handbrake flag in simulator APIs to simulate full stop.
+* **Response Time:** System operates at 10 Hz, ensuring detection-to-brake latency <100 ms.
 
-  * CNN-Udacity (steering only) — ∼264K parameters.
-  * CNN-AirSimNH (steering only) — ∼2.62M parameters.
-  * CNN-AirSimNH (steering + throttle) — ∼2.95M parameters.
+### 2.3 Emergency Brake + Steering Adjustment
 
-* **Autoencoder Baseline:** CNN autoencoder for feature extraction, ∼1K parameters.
+* **Combined Strategy:** Upon obstacle detection in lateral proximity (<2 m from vehicle centerline), throttle is reduced by 50% and steering angle is adjusted away from obstacle.
+* **Steering Adjustment:** Compute obstacle centroid in image frame, map to steering offset via linear mapping: Δθ = k·(x\_img−x\_center), with k calibrated from simulator.
+* **Fail-Safe:** If steering offset exceeds safe limit (±0.3 rad), prioritize braking over steering to avoid overcorrection.
 
-* **Vision Transformers (ViT):** Patch embedding backbone with transformer encoder layers; ∼21.7M parameters for steering-only, extended heads for throttle.
+### 2.4 Model Architectures
 
-### 4.3 Multi-Task Learning
+The following model variants were evaluated:
 
-Shared backbone with separate regression heads for steering and throttle; custom loss weighting to balance tasks based on validation error scales.
+* **CNN-Udacity (Steering Only)**
+* **Autoencoder Baseline (Udacity)**
+* **CNN-AirSimNH (Steering Only)**
+* **CNN-AirSimNH (Steering + Throttle)**
+* **Vision Transformer (ViT) Steering Only**
+* **Vision Transformer (ViT) Steering + Throttle**
 
-### 4.4 Safety and Smoothing
+Refer to Section 3 for detailed performance results.
 
-* Exponential moving average on control outputs to reduce jitter.
-* Emergency braking triggers when YOLO detects obstacle within predefined proximity zone.
-* Throttle reduction during high-curvature scenarios to maintain vehicle stability.
+### 2.5 Multi-Task Learning
 
----
+* **Loss Function:** L = α·MAE\_steer + (1−α)·MAE\_throttle, with α=0.6 determined via grid search.
+* **Training:** Joint backpropagation optimizes shared backbone and distinct heads, using AdamW optimizer and learning rates tuned per model.
 
-## 5. Results and Discussion
+### 2.6 Safety and Smoothing
+
+* **Exponential Smoothing:** ŷ\_t = β·y\_t + (1−β)·ŷ\_{t−1}, with β=0.2 to smooth control actions.
+* **Throttle Modulation:** In high-curvature segments (curvature >0.01 m⁻¹), throttle reduced by 30% to maintain stability.
+
+## 3. Results and Discussion
 
 Performance metrics include Mean Absolute Error (MAE) for steering and throttle.
 
@@ -95,7 +125,7 @@ Visualizations and training curves are available in the project report (PDF).
 
 ---
 
-## 6. Deployment
+## 4. Deployment
 
 * **Streamlit App:** Live demo hosted [here](https://autonomouscarapp-app-iur6pfwku8u5pjovsjmcab.streamlit.app/).
 * **Video Walkthrough:** [YouTube](https://drive.google.com/file/d/1vSDp0IiL0rcNPOlmwP-Dps-3KsKO_GIY/view)
@@ -108,7 +138,7 @@ streamlit run app/app.py
 
 ---
 
-## 7. Conclusion and Future Work
+## 5. Conclusion and Future Work
 
 This study demonstrates the efficacy of deep learning for lateral control with integrated perception and safety modules. ViT-based models achieved the lowest MAE and collision rates, at the expense of higher parameter counts. Future directions include real-world hardware-in-the-loop testing, reinforcement learning for closed-loop adaptation, and sensor fusion with LiDAR.
 
