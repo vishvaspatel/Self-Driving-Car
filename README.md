@@ -140,14 +140,6 @@ Performance metrics include Mean Absolute Error (MAE) for steering and throttle.
 ## 4. Deployment
 
 * **Streamlit App:** Live demo hosted [here](https://autonomouscarapp-app-iur6pfwku8u5pjovsjmcab.streamlit.app/).
-* **Video Walkthrough:** [Video](https://drive.google.com/file/d/1vSDp0IiL0rcNPOlmwP-Dps-3KsKO_GIY/view)
-
-Example usage:
-
-```bash
-streamlit run app/app.py
-```
-
 ---
 
 ## 5. Conclusion and Future Work
