@@ -125,13 +125,16 @@ Refer to Section 3 for detailed performance results.
 
 Performance metrics include Mean Absolute Error (MAE) for steering and throttle.
 
-| Model                     | Steering MAE | Throttle MAE |
-| ------------------------- | -----------: | -----------: |
-| CNN-Udacity               |        0.025 |            — |
-| CNN-AirSimNH (steer only) |        0.018 |            — |
-| CNN-AirSimNH (multi-task) |        0.020 |        0.032 |
-| ViT-AirSimNH (steer only) |        0.015 |            — |
-| ViT-AirSimNH (multi-task) |        0.017 |        0.030 |
+
+| Model                     | Steering Validation Loss | Throttle Validation Loss |
+|---------------------------|--------------------------|--------------------------|
+| CNN-Udacity               | 0.035                    | —                        |
+| Autoencoders              | 0.02                     | —                        |
+| CNN-AirSimNH (steer only) | 0.009                    | —                        |
+| CNN-AirSimNH (multi-task) | 0.033                    | 0.25                     |
+| ViT-AirSimNH (steer only) | 0.00001                  | —                        |
+| ViT-AirSimNH (multi-task) | 0.005                    | 0.009                    |
+
 
 Visualizations and training curves are available in the project report (PDF).
 
