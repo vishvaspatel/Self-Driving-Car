@@ -135,9 +135,6 @@ Performance metrics include Mean Absolute Error (MAE) for steering and throttle.
 | ViT-AirSimNH (steer only) | 0.00001                  | —                        |
 | ViT-AirSimNH (multi-task) | 0.005                    | 0.009                    |
 
-
-Visualizations and training curves are available in the project report (PDF).
-
 ---
 
 ## 4. Deployment
