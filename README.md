@@ -1,4 +1,4 @@
-# Lateral Control for Autonomous Vehicles: Self Driving Car
+# Lateral Control for Autonomous Vehicles (Self Driving Car)
 
 **Date:** May 2025
 **Institution:** Indian Institute of Technology Jodhpur
